@@ -16,6 +16,10 @@ jobs:
       - name: Build Docker image
         run: docker build -t flask-app .
 
+      - name: Run Flask app in background
+        run: |
+          docker run -d --name flask-container -p 8080:5000 flask-app
+
       - name: Run tests
         run: |
           docker run --rm flask-app python tests.py
