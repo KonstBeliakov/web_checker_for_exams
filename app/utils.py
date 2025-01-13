@@ -4,6 +4,11 @@ import docker
 import os
 import shutil
 import stat
+import sys
+import io
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 
 client = docker.from_env()
 

@@ -17,7 +17,25 @@ import app.settings
 import app.models
 
 
+from flask import current_app
+from app.factory import db
+from app.models import Test
+import app.settings
+
+
 routes = Blueprint('routes', __name__)
+
+
+def save_test(app, repo_idx, route_name, state):
+    with current_app.app_context():  # Используем текущий контекст приложения
+        try:
+            test = Test(repository_id=repo_idx, name=route_name, state=state)
+            db.session.add(test)
+            db.session.commit()
+            print('Test saved:', test)
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error saving to database: {e}")
 
 
 @routes.route('/tests', methods=['GET'])
@@ -126,6 +144,11 @@ def check_solution_from_github():
 
                 from app.app import app
                 with app.app_context():
+                    save_test(app, repo_idx, settings.routes[i][0], state)
+
+                '''
+                from app.app import app
+                with app.app_context():
                     try:
                         test = Test(repository_id=repo_idx,
                                     name=settings.routes[i][0],  # route that we check
@@ -136,7 +159,8 @@ def check_solution_from_github():
                         db.session.commit()
                     except Exception as e:
                         db.session.rollback()
-                        print(f"Error saving to database: {e}")
+                        print(f"Error saving to database: {e}")'''
+
 
                 # yield f"data: {json.dumps({'routes_checking': checking_results, 'files_checking': files_checking_results})}\n\n"
                 yield f"data: {json.dumps({'data': data})}\n\n"
