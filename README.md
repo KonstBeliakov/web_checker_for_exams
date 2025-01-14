@@ -1,5 +1,22 @@
 # web_checker_for_exams
 
+### To run the project
+```bash
+docker build -t web_checker .
+docker run -ti -v /var/run/docker.sock:/var/run/docker.sock -p 5000:5000 web_checker 
+```
+
+Project will run on port 5000
+
+open it on linux:
+```bash
+xdg-open http://127.0.0.1:5000
+```
+open it on windows:
+```bash
+start http://127.0.0.1:5000
+```
+
 
 The teacher should be able to specify
  * Where to download repositories from
